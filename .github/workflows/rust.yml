@@ -49,5 +49,5 @@ jobs:
       - name: uploading artifiact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{matrix.artifact_prefix}}-rougeCLI
+          name: ${{matrix.artifact_prefix}}-rustMU
           path: target/${{ matrix.target }}/release/rustMU${{ matrix.binary_postfix}}
