@@ -151,6 +151,11 @@ impl RustMUInst {
                 theme: Theme::default(),
                 configdir = ProjectDirs::from("io", "wylited", "RustMU").config_dir(),
             };
+
+            std::fs::write(config_path.join("config.toml"), config).expect("could not write to file");
+            return config;
+        } else {
+            let config: RustMUInst = toml::from_file(config_file).unwrap();
             return config;
         }
     }

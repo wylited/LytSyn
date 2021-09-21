@@ -80,6 +80,8 @@ impl App {
         let mut terminal = Terminal::new(backend)?;
         terminal.clear()?;
 
+        let mut configinst: crate::playtree::RustMUInst = crate::playtree::RustMUInst::get();
+
         loop {
             terminal.draw(|rect| {
                 let size = rect.size();
@@ -101,8 +103,6 @@ impl App {
 
                 rect.render_widget(initbox, size); */
 
-                // thread::sleep(std::time::Duration::from_secs(5));
-
                 let horizontal_chunks = Layout::default()
                     .direction(Direction::Horizontal)
                     .margin(1)
@@ -117,6 +117,7 @@ impl App {
 
                 //renderer
 
+                // Play tree
                 let playtree = Block::default().title("Playtree").borders(Borders::ALL);
                 rect.render_widget(playtree, horizontal_chunks[0]);
 
@@ -133,6 +134,9 @@ impl App {
                         self.quit = true;
                     }
                     KeyCode::Char('-') => {}
+                    KeyCode::Char('u') => {
+                        
+                    }
                     _ => {}
                 },
                 Event::Tick => {}

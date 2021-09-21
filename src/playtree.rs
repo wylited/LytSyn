@@ -17,7 +17,7 @@ pub struct RustMUFile {
     filetype: FileType,
     name: String,
     path: PathBuf,
-    parent: Some(File),
+    parent: Option<File>,
 }
 
 impl RustMUFile {
@@ -26,7 +26,7 @@ impl RustMUFile {
         ftype: FileType,
         nname: String,
         npath: PathBuf,
-        nparent: Some(File),
+        nparent: Option<File>,
     ) -> Self {
         Self {
             extension: nextension,
@@ -59,7 +59,7 @@ impl RustMUTree {
         let paths = fs::read_dir(musicdir).unwrap();
         let mut tree: Vec<RustMUFile> = Vec::new();
 
-        let filecheck = |dir: &Path, parent: Some(RustMUFile)| -> RustMUFile {
+        let filecheck = |path: &Path, parent: Option<RustMUFile>| -> RustMUFile {
             if !(path.is_file()){
                 tree.push(filecheck(path, parent));
                 return RustMUFile::new(path.extension(), FileType::D, path.file_name().to_string, path, parent);
