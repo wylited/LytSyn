@@ -1,0 +1,31 @@
+[package]
+name = "rustmu"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+byteorder = "1"
+crossterm = { version = "0.21.0", features = [ "serde" ] }
+confy = "0.4.0"
+discord-rpc-client = "0.3.0"
+directories = "4.0.0"
+serde = {version = "1.0", features = ["derive"] }
+serde_derive = "^1.0"
+tui = { version = "0.16.0", default-features = false, features = ['crossterm', 'serde'] }
+tokio = { version = "1.11.0", features = ["full"] }
+rodio = "0.14.0"
+ureq = "2.2"
+urlqstring = "0.3"
+viuer = "0.5"
+ytd-rs = "0.1"
+
+[replace]
+"discord-rpc-client:0.3.0" = { git = "https://github.com/JakeStanger/discord-rpc-client.rs" }
+
+[[bin]]
+bench = false
+path = "src/main.rs"
+name = "rust_mu"

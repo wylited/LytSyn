@@ -1,0 +1,26 @@
+RustMU = "uuid"
+
+[files] #caching of files for a faster load up
+1 = [
+  "name",
+  "path_buf"
+]
+
+[theming]
+gauge_color = ["22", "22", "22"]
+borders = ["22", "22", "22"]
+major_text = ["22", "22", "22"]
+minor_text = ["22", "22", "22"]
+selectsymbol = ">>"
+foldersymbol = "|"
+
+[settings]
+discordrpc = true
+server = true
+caching = true
+volume = "84"
+
+[server]
+  [[server.wylited]]
+  hostname = "wyli-hub"
+  ip = ["61", "15", "75", "43"]

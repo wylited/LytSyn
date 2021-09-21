@@ -1,0 +1,13 @@
+D:\coding\rust\rustMU\target\release\deps\cc-a2a7715c44f43583.rmeta: C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\lib.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\registry.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\winapi.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\com.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\setup_config.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\vs_instances.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\windows_registry.rs
+
+D:\coding\rust\rustMU\target\release\deps\libcc-a2a7715c44f43583.rlib: C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\lib.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\registry.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\winapi.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\com.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\setup_config.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\vs_instances.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\windows_registry.rs
+
+D:\coding\rust\rustMU\target\release\deps\cc-a2a7715c44f43583.d: C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\lib.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\registry.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\winapi.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\com.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\setup_config.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\vs_instances.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\windows_registry.rs
+
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\lib.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\registry.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\winapi.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\com.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\setup_config.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\vs_instances.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\cc-1.0.70\src\windows_registry.rs:

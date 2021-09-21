@@ -1,0 +1,11 @@
+D:\coding\rust\rustMU\target\release\deps\unicode_segmentation-150cb9958f380341.rmeta: C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\lib.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\grapheme.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\tables.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\word.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\sentence.rs
+
+D:\coding\rust\rustMU\target\release\deps\libunicode_segmentation-150cb9958f380341.rlib: C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\lib.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\grapheme.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\tables.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\word.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\sentence.rs
+
+D:\coding\rust\rustMU\target\release\deps\unicode_segmentation-150cb9958f380341.d: C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\lib.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\grapheme.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\tables.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\word.rs C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\sentence.rs
+
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\lib.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\grapheme.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\tables.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\word.rs:
+C:\Users\idhaa\.cargo\registry\src\github.com-1ecc6299db9ec823\unicode-segmentation-1.8.0\src\sentence.rs:
