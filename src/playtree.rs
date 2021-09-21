@@ -69,8 +69,9 @@ impl RustMUTree {
         };
         for path in paths {
             tree.push(filecheck(path, None));
+            // O((N logN)^2)
         } 
-        
+
         return tree;
     }
 }
