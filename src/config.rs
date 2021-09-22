@@ -1,9 +1,11 @@
 use directories::ProjectDirs;
 use std::net::Ipv4Addr;
+use std::path::PathBuf;
 use std::io;
 use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
+use std::fs;
 use tui::{
     backend::CrosstermBackend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
@@ -53,8 +55,8 @@ impl Theme {
             border: [191, 239, 255],
             minor_text: [191, 239, 255],
             major_text: [191, 239, 255],
-            selectsymbol: [191, 239, 255],
-            foldersymbol: [191, 239, 255],
+            selectsymbol: ">>".to_string(),
+            foldersymbol: "|".to_string(),
         }
     }
 }
@@ -125,11 +127,11 @@ pub struct RustMUInst {
     files: Vec<CachedFile>,
     setting: Settings,
     theme: Theme,
-    configdir: ProjectDirs,
+    configdir: PathBuf,
 }
 
 impl RustMUInst {
-    pub fn new(ver: String, unique: String, server: Vec<Server>, file: Vec<CachedFile>, settings: Settings, themes: Theme, configpath: ProjectDirs) -> Self {
+    pub fn new(ver: String, unique: String, server: Vec<Server>, file: Vec<CachedFile>, settings: Settings, themes: Theme, configpath: PathBuf) -> Self {
         Self {
             version: ver,
             UUID: unique,
@@ -142,8 +144,8 @@ impl RustMUInst {
     }
 
     pub fn get() -> RustMUInst {
-        let config_path: &Path = ProjectDirs::from("io", "wylited", "RustMU").config_dir();
-        let config_file: &Path = config_path.join("config.toml");
+        let config_path: &Path = ProjectDirs::from("io", "wylited", "RustMU").unwrap().config_dir();
+        let config_file: PathBuf = config_path.join("config.toml");
         if !(config_file.exists()){
             let config = RustMUInst {
                 version: "1.0.0".to_string(),
@@ -152,10 +154,10 @@ impl RustMUInst {
                 files: Vec::new(),
                 setting: Settings::default(),
                 theme: Theme::default(),
-                configdir: ProjectDirs::from("io", "wylited", "RustMU").config_dir(),
+                configdir: ProjectDirs::from("io", "wylited", "RustMU").unwrap().config_dir().to_path_buf(),
             };
 
-            std::fs::write(config_path.join("config.toml"), config).expect("could not write to file");
+            std::fs::write(config_path.join("config.toml"), toml::to_string(&config).unwrap()).expect("could not write to file");
             return config;
         } else {
             let config: RustMUInst = toml::from_str(fs::read_to_string(config_file)).parse();

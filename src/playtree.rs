@@ -1,6 +1,6 @@
 use rodio::{source::Source, Decoder, OutputStream, Sink};
-use std::collections::HashMap;
-use std::ffi::OsStr;
+use std::collections::HashSet;
+use std::ffi::OsString;
 use std::fs;
 use std::fs::File;
 use std::io::BufReader;
@@ -8,24 +8,26 @@ use std::path::{Path, PathBuf};
 use tui::style::{Color, Modifier, Style};
 use tui::widgets::{Block, Borders, List, ListItem};
 
+#[derive(Hash, Eq, PartialEq, Debug)]
 pub enum FileType {
     F,
     D,
 }
 
+#[derive(Hash, Eq, PartialEq, Debug)]
 pub struct RustMUFile {
-    extension: &OsStr,
+    extension: OsString,
     filetype: FileType,
-    name: String,
+    name: OsString,
     path: PathBuf,
     parent: Option<File>,
 }
 
 impl RustMUFile {
     pub fn new(
-        nextension: &OsStr,
+        nextension: OsString,
         ftype: FileType,
-        nname: String,
+        nname: OsString,
         npath: PathBuf,
         nparent: Option<File>,
     ) -> Self {
@@ -38,11 +40,13 @@ impl RustMUFile {
         }
     }
 }
+
+#[derive(Hash, Eq, PartialEq, Debug)]
 pub struct RustMUTree {
-    dir_map: HashMap<i32, RustMUFile>
+    dir_map: Vec<RustMUFile>
 }
 impl RustMUTree {
-    pub fn new(file_map: HashMap<i32, RustMUFile>) -> Self {
+    pub fn new(file_map: Vec<RustMUFile>) -> Self {
         Self {
             dir_map: file_map,
         }
@@ -56,31 +60,23 @@ impl RustMUTree {
             .highlight_symbol(">>")
     }
 
-    pub fn parse(musicdir: &Path) -> RustMUTree {
+    pub fn parse(musicdir: PathBuf) -> RustMUTree {
         let paths = fs::read_dir(musicdir).unwrap();
-        let mut tree: Vec<RustMUFile> = Vec::new();
+        let mut tree= Vec::new();
 
-        let filecheck = |path: &Path, parent: Option<RustMUFile>| -> RustMUFile {
+        fn filecheck(path: PathBuf, parent: Option<RustMUFile>, original: Vec<RustMUFile>) -> Vec<RustMUFile> {
             if !(path.is_file()){
-                tree.push(fixecheck(path, parent));
-                return RustMUFile::new(path.extension().unwrap(), FileType::D, path.file_name().to_string(), path, parent);
+                original = filecheck(path, parent, original);
+                original.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::D, path.file_name().unwrap().to_os_string(), path, parent));
+                return original;
             } else {
-                return RustMUFile::new(path.extension().unwrap(), FileType::F, path.file_name().to_string(), path, parent);
-            } // I cant do recursion in closures, this is pain.
-        };
-
-        let fixecheck = |path: &Path, parent: Option<RustMUFile>| -> RustMUFile {
-            if !(path.is_file()){
-                tree.push(filecheck(path, parent));
-                return RustMUFile::new(path.extension().unwrap(), FileType::D, path.file_name().to_string(), path, parent);
-            } else {
-                return RustMUFile::new(path.extension().unwrap(), FileType::F, path.file_name().to_string(), path, parent);
-            } // I cant do recursion in closures, this is pain.
-        };
-
+                original.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path, parent));
+                return original;
+            } 
+        }
 
         for path in paths {
-            tree.push(filecheck(path.path().as_path(), None));
+            filecheck(path.unwrap().path(), None, tree);
             // O((N logN)^2)
         } 
 
