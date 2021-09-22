@@ -1,6 +1,7 @@
 //imports
 #![allow(unused_imports)]
 mod app;
+mod config;
 mod playtree;
 
 extern crate tokio;

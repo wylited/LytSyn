@@ -15,6 +15,9 @@ use tui::{
     Terminal,
 };
 use toml::Value;
+use serde::{Serialize, Deserialize};
+use std::path::Path;
+
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Theme {
@@ -46,39 +49,39 @@ impl Theme {
     }
     pub fn default() -> Self {
         Self {
-            bar = [191, 239, 255],
-            border = [191, 239, 255],
-            minor_text = [191, 239, 255],
-            major_text = [191, 239, 255],
-            selectsymbol = [191, 239, 255],
-            foldersymbol = [191, 239, 255],
+            bar: [191, 239, 255],
+            border: [191, 239, 255],
+            minor_text: [191, 239, 255],
+            major_text: [191, 239, 255],
+            selectsymbol: [191, 239, 255],
+            foldersymbol: [191, 239, 255],
         }
     }
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Settings {
-    discord: Boolean,
-    network: Boolean,
-    caching: Boolean,
+    discord: bool,
+    network: bool,
+    caching: bool,
     volume: i16,
 }
 
 impl Settings {
-    pub fn new(ndiscord: Boolean, nnetwork: Boolean, ncaching: Boolean, nvolume: i16) -> Self {
+    pub fn new(ndiscord: bool, nnetwork: bool, ncaching: bool, nvolume: i16) -> Self {
         Self {
-            discord = ndiscord,
-            network = nnetwork,
-            caching = ncaching,
-            volume = nvolume,
+            discord: ndiscord,
+            network: nnetwork,
+            caching: ncaching,
+            volume: nvolume,
         }
     }
     pub fn default() -> Self {
         Self {
-            discord = true, 
-            network = false,
-            caching = true,
-            volume = 100,
+            discord: true, 
+            network: false,
+            caching: true,
+            volume: 100,
         }
     }
 }
@@ -106,10 +109,10 @@ pub struct Server {
 impl Server{
     pub fn new(nowner: String, nname: String, nip: Ipv4Addr, nport: i32) -> Self {
         Self {
-            owner = nowner,
-            name = nname,
-            ip = nip,
-            port = nport,
+            owner: nowner,
+            name: nname,
+            ip: nip,
+            port: nport,
         } 
     }
 }
@@ -126,20 +129,20 @@ pub struct RustMUInst {
 }
 
 impl RustMUInst {
-    pub fn new(ver: String, unique: String, server: vec<Server>, file: Vec<CachedFile>, settings: Settings, themes: Theme, configpath: ProjectDirs) -> Self {
+    pub fn new(ver: String, unique: String, server: Vec<Server>, file: Vec<CachedFile>, settings: Settings, themes: Theme, configpath: ProjectDirs) -> Self {
         Self {
-            version = ver,
-            UUID = unique,
-            servers = server,
-            files = file,
-            settings = settings,
-            theme = themes,
-            configdir = configpath,
+            version: ver,
+            UUID: unique,
+            servers: server,
+            files: file,
+            setting: settings,
+            theme: themes,
+            configdir: configpath,
         }
     }
 
     pub fn get() -> RustMUInst {
-        let config_path: &Path = Projectdirs::from("io", "wylited", "RustMU").config_dir();
+        let config_path: &Path = ProjectDirs::from("io", "wylited", "RustMU").config_dir();
         let config_file: &Path = config_path.join("config.toml");
         if !(config_file.exists()){
             let config = RustMUInst {
@@ -147,15 +150,15 @@ impl RustMUInst {
                 UUID: "eba50a90-72e4-44d2-b8db-db1bafcc5d15".to_string(),
                 servers: Vec::new(),
                 files: Vec::new(),
-                settings: Settings::default(),
+                setting: Settings::default(),
                 theme: Theme::default(),
-                configdir = ProjectDirs::from("io", "wylited", "RustMU").config_dir(),
+                configdir: ProjectDirs::from("io", "wylited", "RustMU").config_dir(),
             };
 
             std::fs::write(config_path.join("config.toml"), config).expect("could not write to file");
             return config;
         } else {
-            let config: RustMUInst = toml::from_file(config_file).unwrap();
+            let config: RustMUInst = toml::from_str(fs::read_to_string(config_file)).parse();
             return config;
         }
     }

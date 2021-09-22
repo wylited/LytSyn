@@ -1,5 +1,6 @@
 use rodio::{source::Source, Decoder, OutputStream, Sink};
 use std::collections::HashMap;
+use std::ffi::OsStr;
 use std::fs;
 use std::fs::File;
 use std::io::BufReader;
@@ -13,7 +14,7 @@ pub enum FileType {
 }
 
 pub struct RustMUFile {
-    extension: String,
+    extension: &OsStr,
     filetype: FileType,
     name: String,
     path: PathBuf,
@@ -22,7 +23,7 @@ pub struct RustMUFile {
 
 impl RustMUFile {
     pub fn new(
-        nextension: String,
+        nextension: &OsStr,
         ftype: FileType,
         nname: String,
         npath: PathBuf,
@@ -61,18 +62,29 @@ impl RustMUTree {
 
         let filecheck = |path: &Path, parent: Option<RustMUFile>| -> RustMUFile {
             if !(path.is_file()){
-                tree.push(filecheck(path, parent));
-                return RustMUFile::new(path.extension(), FileType::D, path.file_name().to_string, path, parent);
+                tree.push(fixecheck(path, parent));
+                return RustMUFile::new(path.extension().unwrap(), FileType::D, path.file_name().to_string(), path, parent);
             } else {
-                return RustMUFile::new(path.extension(), FileType::F, path.file_name().to_string, path, parent);
-            }
+                return RustMUFile::new(path.extension().unwrap(), FileType::F, path.file_name().to_string(), path, parent);
+            } // I cant do recursion in closures, this is pain.
         };
+
+        let fixecheck = |path: &Path, parent: Option<RustMUFile>| -> RustMUFile {
+            if !(path.is_file()){
+                tree.push(filecheck(path, parent));
+                return RustMUFile::new(path.extension().unwrap(), FileType::D, path.file_name().to_string(), path, parent);
+            } else {
+                return RustMUFile::new(path.extension().unwrap(), FileType::F, path.file_name().to_string(), path, parent);
+            } // I cant do recursion in closures, this is pain.
+        };
+
+
         for path in paths {
-            tree.push(filecheck(path, None));
+            tree.push(filecheck(path.path().as_path(), None));
             // O((N logN)^2)
         } 
 
-        return tree;
+        return RustMUTree::new(tree);
     }
 }
 

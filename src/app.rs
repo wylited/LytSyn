@@ -22,6 +22,8 @@ use tui::{
     Terminal,
 };
 
+pub use crate::config::RustMUInst;
+
 enum Event<I> {
     Input(I),
     Tick,
@@ -80,7 +82,7 @@ impl App {
         let mut terminal = Terminal::new(backend)?;
         terminal.clear()?;
 
-        let mut configinst: crate::playtree::RustMUInst = crate::playtree::RustMUInst::get();
+        let mut configinst: RustMUInst = RustMUInst::get();
 
         loop {
             terminal.draw(|rect| {
