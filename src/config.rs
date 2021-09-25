@@ -1,4 +1,9 @@
+use std::path::PathBuf;
+
+use serde::{Deserialize, Serialize};
 use directories::ProjectDirs;
+
+/*
 use std::net::Ipv4Addr;
 use std::path::PathBuf;
 use std::io;
@@ -17,7 +22,6 @@ use tui::{
     Terminal,
 };
 use toml::Value;
-use serde::{Serialize, Deserialize};
 use std::path::Path;
 
 
@@ -80,7 +84,7 @@ impl Settings {
     }
     pub fn default() -> Self {
         Self {
-            discord: true, 
+            discord: true,
             network: false,
             caching: true,
             volume: 100,
@@ -96,7 +100,7 @@ impl CachedFile{
     pub fn new() -> Self {
         Self {
 
-        } 
+        }
     }
 }
 
@@ -115,7 +119,7 @@ impl Server{
             name: nname,
             ip: nip,
             port: nport,
-        } 
+        }
     }
 }
 
@@ -162,6 +166,130 @@ impl RustMUInst {
         } else {
             let config: RustMUInst = toml::from_str(fs::read_to_string(config_file)).parse();
             return config;
+        }
+    }
+}
+*/
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Theme {
+    gauge: [i8; 3],
+    borders: [i8; 3],
+    minor_text: [i8; 3],
+    major_text: [i8; 3],
+    selectsymbol: String,
+}
+
+impl Theme {
+    pub fn default() -> Theme {
+        Theme {
+            gauge: [85, 170, 200],
+            borders: [30, 30, 60],
+            minor_text: [255, 255, 255],
+            major_text: [255, 200, 70],
+            selectsymbol: ">>".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Settings {
+    discord: bool,
+    server: bool,
+    caching: bool,
+    volume: i8,
+}
+
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            discord: true,
+            server: true,
+            caching: false,
+            volume: 95,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Servers {
+    servers: Vec<Server>,
+}
+
+impl Servers {
+    pub fn default() -> Self {
+        Self {
+            servers: Vec::new(),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Server {
+    hostname: String,
+    port: u16,
+    ip4: [i8; 4],
+}
+
+impl Server {
+    pub fn new(hostname: String, port: u16, ip4: [i8; 4]) -> Self {
+        Self {
+            hostname,
+            port,
+            ip4,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct MuConfig {
+    rmu: i32,
+    theme: Theme,
+    settings: Settings,
+    servers: Servers,
+}
+
+impl MuConfig {
+    pub fn default() -> Self {
+        Self {  
+            rmu: 12345678,
+            theme: Theme::default(),
+            settings: Settings::default(),
+            servers: Servers::default(),
+        }
+    }
+    pub fn get() -> MuConfig {
+        let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "RustMU").unwrap().config_dir().to_path_buf().join("config.yaml");
+        if !(config_file.exists()){
+            let yamlstr = r#"---
+rMU: "uuid"
+
+theme:
+  gauge_color: [255, 255, 255]
+  border: [255, 255, 255]
+  minor_text: [255, 255, 255]
+  major_text: [255, 255, 255]
+  selectsymbol: ">>"
+
+settings:
+  discordrpc: true
+  server: true
+  caching: false
+  volume: 95
+
+servers:
+  server.wylited:
+    hostname: "wylihub"
+    ip:
+      -61
+      -15
+      -75
+      -43
+            "#;
+            return MuConfig::default();
+        } else {
+            return MuConfig::default();
         }
     }
 }

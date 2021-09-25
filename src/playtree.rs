@@ -8,19 +8,19 @@ use std::path::{Path, PathBuf};
 use tui::style::{Color, Modifier, Style};
 use tui::widgets::{Block, Borders, List, ListItem};
 
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Clone)]
 pub enum FileType {
     F,
     D,
 }
 
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Clone)]
 pub struct RustMUFile {
     extension: OsString,
     filetype: FileType,
     name: OsString,
     path: PathBuf,
-    parent: Option<File>,
+    parent: Option<PathBuf>,
 }
 
 impl RustMUFile {
@@ -29,7 +29,7 @@ impl RustMUFile {
         ftype: FileType,
         nname: OsString,
         npath: PathBuf,
-        nparent: Option<File>,
+        nparent: Option<PathBuf>,
     ) -> Self {
         Self {
             extension: nextension,
@@ -41,18 +41,26 @@ impl RustMUFile {
     }
 }
 
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Clone)]
 pub struct RustMUTree {
-    dir_map: Vec<RustMUFile>
+    file_map: Vec<RustMUFile>,
 }
+
 impl RustMUTree {
-    pub fn new(file_map: Vec<RustMUFile>) -> Self {
+    pub fn new(file_map: &Vec<RustMUFile>) -> Self {
         Self {
-            dir_map: file_map,
+            file_map: file_map.to_vec(),
         }
     }
 
-    pub fn display(items: Vec<ListItem>) -> List {
+    pub fn display<'a>(tree: RustMUTree) -> List<'a> {
+        let files: Vec<RustMUFile> = tree.file_map;
+        let mut items: Vec<ListItem<'a>> = Vec::new();
+
+        for file in files {
+            items.push(ListItem::new(file.name.into_string().unwrap()));
+        }
+
         List::new(items)
             .block(Block::default().title("Playlist").borders(Borders::ALL))
             .style(Style::default().fg(Color::White))
@@ -62,24 +70,25 @@ impl RustMUTree {
 
     pub fn parse(musicdir: PathBuf) -> RustMUTree {
         let paths = fs::read_dir(musicdir).unwrap();
-        let mut tree= Vec::new();
+        let mut tree = &Vec::new();
 
-        fn filecheck(path: PathBuf, parent: Option<RustMUFile>, original: Vec<RustMUFile>) -> Vec<RustMUFile> {
+        fn filecheck<'a>(path: &'a PathBuf, parent: Option<PathBuf>, original: &Vec<RustMUFile>) -> &'a Vec<RustMUFile> {
+            let mut changed: Vec<RustMUFile> = original.to_vec();
             if !(path.is_file()){
-                original = filecheck(path, parent, original);
-                original.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::D, path.file_name().unwrap().to_os_string(), path, parent));
-                return original;
+                changed.extend(filecheck(path, Some(path.to_path_buf()), original).iter().cloned());
+                changed.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::D, path.file_name().unwrap().to_os_string(), path.to_path_buf(), parent));
+                let returnval = &changed.to_vec();
+                return returnval;
             } else {
-                original.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path, parent));
-                return original;
+                changed.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), parent));
+                let returnval = &changed.to_vec();
+                return returnval;
             } 
         }
 
         for path in paths {
-            filecheck(path.unwrap().path(), None, tree);
-            // O((N logN)^2)
-        } 
-
+            let tree = filecheck(&path.unwrap().path(), None, &tree);
+        }
         return RustMUTree::new(tree);
     }
 }

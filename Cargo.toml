@@ -7,13 +7,12 @@ edition = "2018"
 
 [dependencies]
 anyhow = "1.0"
-byteorder = "1"
 crossterm = { version = "0.21.0", features = [ "serde" ] }
-confy = "0.4.0"
 discord-rpc-client = "0.3.0"
 directories = "4.0.1"
 serde = {version = "1.0.130", features = ["derive"] }
 serde_derive = "^1.0"
+serde_yaml = "0.8.21"
 tui = { version = "0.16.0", default-features = false, features = ['crossterm', 'serde'] }
 tokio = { version = "1.11.0", features = ["full"] }
 toml = "0.5.8"

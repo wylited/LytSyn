@@ -6,6 +6,7 @@ use crossterm::{
     event::{self, Event as CEvent, KeyCode},
     terminal::{disable_raw_mode, enable_raw_mode},
 };
+use directories::UserDirs;
 use rodio::{source::Source, Decoder, OutputStream, OutputStreamHandle, Sink};
 use std::io;
 use std::sync::mpsc;
@@ -21,8 +22,6 @@ use tui::{
     },
     Terminal,
 };
-
-pub use crate::config::RustMUInst;
 
 enum Event<I> {
     Input(I),
@@ -82,8 +81,6 @@ impl App {
         let mut terminal = Terminal::new(backend)?;
         terminal.clear()?;
 
-        let mut configinst: RustMUInst = RustMUInst::get();
-
         loop {
             terminal.draw(|rect| {
                 let size = rect.size();
@@ -118,9 +115,10 @@ impl App {
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
                 //renderer
-
+                let mutree = RustMUTree::parse(UserDirs::new().unwrap().audio_dir().unwrap().to_path_buf());
+                
                 // Play tree
-                let playtree = Block::default().title("Playtree").borders(Borders::ALL);
+                let playtree = RustMUTree::display(mutree);
                 rect.render_widget(playtree, horizontal_chunks[0]);
 
                 let queue = Block::default().title("Queue").borders(Borders::ALL);

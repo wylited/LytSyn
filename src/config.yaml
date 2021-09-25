@@ -1,0 +1,25 @@
+---
+rMU: "uuid"
+
+theme:
+  gauge_color: [255, 255, 255]
+  border: [255, 255, 255]
+  minor_text: [255, 255, 255]
+  major_text: [255, 255, 255]
+  selectsymbol: ">>"
+
+settings:
+  discordrpc: true
+  server: true
+  caching: false
+  volume: 95
+
+servers:
+  server.wylited:
+    hostname: "wylihub"
+    ip:
+      -61
+      -15
+      -75
+      -43
+  
