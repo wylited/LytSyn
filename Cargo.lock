@@ -1562,6 +1562,7 @@ dependencies = [
  "crossterm 0.21.0",
  "directories",
  "discord-rpc-client 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glob",
  "rodio",
  "serde",
  "serde_derive",

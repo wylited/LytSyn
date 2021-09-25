@@ -173,10 +173,10 @@ impl RustMUInst {
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Theme {
-    gauge: [i8; 3],
-    borders: [i8; 3],
-    minor_text: [i8; 3],
-    major_text: [i8; 3],
+    gauge: [i16; 3],
+    borders: [i16; 3],
+    minor_text: [i16; 3],
+    major_text: [i16; 3],
     selectsymbol: String,
 }
 
@@ -287,9 +287,9 @@ servers:
       -75
       -43
             "#;
-            return MuConfig::default();
+            MuConfig::default()
         } else {
-            return MuConfig::default();
+            MuConfig::default()
         }
     }
 }

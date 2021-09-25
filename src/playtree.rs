@@ -1,3 +1,4 @@
+use glob::glob;
 use rodio::{source::Source, Decoder, OutputStream, Sink};
 use std::collections::HashSet;
 use std::ffi::OsString;
@@ -47,7 +48,7 @@ pub struct RustMUTree {
 }
 
 impl RustMUTree {
-    pub fn new(file_map: &Vec<RustMUFile>) -> Self {
+    pub fn new(file_map: &[RustMUFile]) -> Self {
         Self {
             file_map: file_map.to_vec(),
         }
@@ -68,28 +69,15 @@ impl RustMUTree {
             .highlight_symbol(">>")
     }
 
-    pub fn parse(musicdir: PathBuf) -> RustMUTree {
-        let paths = fs::read_dir(musicdir).unwrap();
-        let mut tree = &Vec::new();
+    pub fn parse(musicdir: &str) -> RustMUTree {
+        let mut tree = Vec::new();
 
-        fn filecheck<'a>(path: &'a PathBuf, parent: Option<PathBuf>, original: &Vec<RustMUFile>) -> &'a Vec<RustMUFile> {
-            let mut changed: Vec<RustMUFile> = original.to_vec();
-            if !(path.is_file()){
-                changed.extend(filecheck(path, Some(path.to_path_buf()), original).iter().cloned());
-                changed.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::D, path.file_name().unwrap().to_os_string(), path.to_path_buf(), parent));
-                let returnval = &changed.to_vec();
-                return returnval;
-            } else {
-                changed.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), parent));
-                let returnval = &changed.to_vec();
-                return returnval;
-            } 
+        for entry in glob(musicdir).expect("Failed to read glob pattern") {
+            match entry {
+                Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), None)),
+                Err(e) => println!("{:?}", e),
+            }
         }
-
-        for path in paths {
-            let tree = filecheck(&path.unwrap().path(), None, &tree);
-        }
-        return RustMUTree::new(tree);
+        RustMUTree::new(&tree)
     }
 }
-

@@ -68,10 +68,8 @@ impl App {
                     }
                 }
 
-                if last_tick.elapsed() >= tick_rate {
-                    if tx.send(Event::Tick).is_ok() {
-                        last_tick = Instant::now();
-                    }
+                if last_tick.elapsed() >= tick_rate && tx.send(Event::Tick).is_ok() {
+                    last_tick = Instant::now();
                 }
             }
         }); //ticking and polling.
@@ -115,8 +113,8 @@ impl App {
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
                 //renderer
-                let mutree = RustMUTree::parse(UserDirs::new().unwrap().audio_dir().unwrap().to_path_buf());
-                
+                let mutree = RustMUTree::parse(r"C:\Users\idhaa\Music\**\*");
+
                 // Play tree
                 let playtree = RustMUTree::display(mutree);
                 rect.render_widget(playtree, horizontal_chunks[0]);
@@ -134,15 +132,13 @@ impl App {
                         self.quit = true;
                     }
                     KeyCode::Char('-') => {}
-                    KeyCode::Char('u') => {
-                        
-                    }
+                    KeyCode::Char('u') => {}
                     _ => {}
                 },
                 Event::Tick => {}
             }
 
-            if self.quit == true {
+            if self.quit{
                 disable_raw_mode()?;
                 terminal.show_cursor()?;
                 break;
