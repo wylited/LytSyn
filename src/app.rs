@@ -49,7 +49,6 @@ impl App {
             stream_handle: streamhandle,
         }
     }
-
     pub fn run(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         enable_raw_mode().expect("can run in raw mode"); //not sure exactly but doesnt exactly work without this
         let (tx, rx) = mpsc::channel();
@@ -112,8 +111,11 @@ impl App {
                     .constraints([Constraint::Percentage(70), Constraint::Percentage(30)])
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
+                let file: PathBuf = UserDirs::new().unwrap().audio_dir().unwrap().to_path_buf();
                 //renderer
-                let mutree = RustMUTree::parse(r"C:\Users\idhaa\Music\**\*");
+                let path: String = String::from(file.join(r"**").join("*.").to_str().unwrap());
+                
+                let mutree = RustMUTree::parse(&path);
 
                 // Play tree
                 let playtree = RustMUTree::display(mutree);
@@ -124,6 +126,7 @@ impl App {
 
                 let player = Block::default().title("Player").borders(Borders::ALL);
                 rect.render_widget(player, vertical_chunks[1]);
+                
             })?;
 
             match rx.recv()? {

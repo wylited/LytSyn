@@ -59,7 +59,7 @@ impl RustMUTree {
         let mut items: Vec<ListItem<'a>> = Vec::new();
 
         for file in files {
-            items.push(ListItem::new(file.name.into_string().unwrap()));
+            items.push(ListItem::new(String::from("|")+ &file.name.into_string().unwrap()));
         }
 
         List::new(items)
@@ -74,7 +74,7 @@ impl RustMUTree {
 
         for entry in glob(musicdir).expect("Failed to read glob pattern") {
             match entry {
-                Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), None)),
+                Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap_or_default().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), None)),
                 Err(e) => println!("{:?}", e),
             }
         }
