@@ -9,13 +9,13 @@ use std::path::{Path, PathBuf};
 use tui::style::{Color, Modifier, Style};
 use tui::widgets::{Block, Borders, List, ListItem};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum FileType {
     F,
     D,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct RustMUFile {
     extension: OsString,
     filetype: FileType,
@@ -42,7 +42,7 @@ impl RustMUFile {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct RustMUTree {
     file_map: Vec<RustMUFile>,
 }
@@ -63,7 +63,7 @@ impl RustMUTree {
         }
 
         List::new(items)
-            .block(Block::default().title("Playlist").borders(Borders::ALL))
+            .block(Block::default().title("| Playlist |").borders(Borders::ALL))
             .style(Style::default().fg(Color::White))
             .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
             .highlight_symbol(">>")
@@ -73,6 +73,7 @@ impl RustMUTree {
         let mut tree = Vec::new();
 
         for entry in glob(musicdir).expect("Failed to read glob pattern") {
+            dbg!(&entry);
             match entry {
                 Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap_or_default().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), None)),
                 Err(e) => println!("{:?}", e),

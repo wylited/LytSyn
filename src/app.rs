@@ -1,4 +1,4 @@
-use crate::playtree::RustMUTree;
+use crate::{config::MuConfig, playtree::RustMUTree};
 use std::env;
 use std::path::PathBuf;
 
@@ -99,6 +99,8 @@ impl App {
 
                 rect.render_widget(initbox, size); */
 
+                let _config = MuConfig::get();
+                
                 let horizontal_chunks = Layout::default()
                     .direction(Direction::Horizontal)
                     .margin(1)
@@ -111,20 +113,20 @@ impl App {
                     .constraints([Constraint::Percentage(70), Constraint::Percentage(30)])
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
-                let file: PathBuf = UserDirs::new().unwrap().audio_dir().unwrap().to_path_buf();
-                //renderer
-                let path: String = String::from(file.join(r"**").join("*.").to_str().unwrap());
-                
+                let file: &String = &UserDirs::new().unwrap().audio_dir().unwrap().to_str().unwrap().to_string();
+                let path = format!(r"{}\**\*.", file);
                 let mutree = RustMUTree::parse(&path);
+                dbg!(&path); //tryna fix the config and file system checker. Modularity really loves to break everything
+                //renderer
 
                 // Play tree
                 let playtree = RustMUTree::display(mutree);
                 rect.render_widget(playtree, horizontal_chunks[0]);
 
-                let queue = Block::default().title("Queue").borders(Borders::ALL);
+                let queue = Block::default().title("| Queue |").borders(Borders::ALL);
                 rect.render_widget(queue, vertical_chunks[0]);
 
-                let player = Block::default().title("Player").borders(Borders::ALL);
+                let player = Block::default().title("| Player |").borders(Borders::ALL);
                 rect.render_widget(player, vertical_chunks[1]);
                 
             })?;

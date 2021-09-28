@@ -93,12 +93,13 @@ impl MuConfig {
     }
 
     pub fn get() -> MuConfig {
-        let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "RustMU").unwrap().config_dir().to_path_buf().join("config.yaml");
+        let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "RustMU").unwrap().config_dir().to_path_buf();
+        let config_string = fs::read_to_string(&config_file.join("config.toml"));
         
-        let config_string = fs::read_to_string(&config_file).unwrap_or("".to_string());
-        let config: MuConfig = serde_yaml::Deserializer::from_str(&config_string).unwrap_or_else(
-            MuConfig::default()
-        );
+        let config: MuConfig = match config_string {
+            Ok(file) => toml::from_str(&file).unwrap(),
+            Err(_) => MuConfig::default(),
+        };
         config
     }
 }
