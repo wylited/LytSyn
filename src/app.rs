@@ -100,7 +100,7 @@ impl App {
                 rect.render_widget(initbox, size); */
 
                 let _config = MuConfig::get();
-                
+
                 let horizontal_chunks = Layout::default()
                     .direction(Direction::Horizontal)
                     .margin(1)
@@ -113,12 +113,9 @@ impl App {
                     .constraints([Constraint::Percentage(70), Constraint::Percentage(30)])
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
-                let file: &String = &UserDirs::new().unwrap().audio_dir().unwrap().to_str().unwrap().to_string();
-                let path = format!(r"{}\**\*.", file);
-                let mutree = RustMUTree::parse(&path);
-                dbg!(&path); //tryna fix the config and file system checker. Modularity really loves to break everything
-                //renderer
+                let mutree = RustMUTree::parse(false);
 
+                //renderer
                 // Play tree
                 let playtree = RustMUTree::display(mutree);
                 rect.render_widget(playtree, horizontal_chunks[0]);
@@ -128,7 +125,6 @@ impl App {
 
                 let player = Block::default().title("| Player |").borders(Borders::ALL);
                 rect.render_widget(player, vertical_chunks[1]);
-                
             })?;
 
             match rx.recv()? {
@@ -143,7 +139,7 @@ impl App {
                 Event::Tick => {}
             }
 
-            if self.quit{
+            if self.quit {
                 disable_raw_mode()?;
                 terminal.show_cursor()?;
                 break;

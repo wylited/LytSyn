@@ -8,6 +8,7 @@ use std::io::BufReader;
 use std::path::{Path, PathBuf};
 use tui::style::{Color, Modifier, Style};
 use tui::widgets::{Block, Borders, List, ListItem};
+use directories::UserDirs;
 
 #[derive(Clone, Debug)]
 pub enum FileType {
@@ -69,16 +70,19 @@ impl RustMUTree {
             .highlight_symbol(">>")
     }
 
-    pub fn parse(musicdir: &str) -> RustMUTree {
+    pub fn parse(other: bool) -> RustMUTree {
         let mut tree = Vec::new();
 
-        for entry in glob(musicdir).expect("Failed to read glob pattern") {
-            dbg!(&entry);
+        let user_dir = UserDirs::new().unwrap();
+        let file: &str = &user_dir.home_dir().file_name().unwrap().to_str().unwrap();
+
+        for entry in glob(&format!("C:/Users/{}/Music/**/*", file)).expect("Failed to read glob pattern") {
             match entry {
                 Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap_or_default().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), None)),
                 Err(e) => println!("{:?}", e),
             }
         }
+
         RustMUTree::new(&tree)
     }
 }
