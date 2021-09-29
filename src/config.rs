@@ -5,11 +5,11 @@ use directories::ProjectDirs;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Theme {
-    gauge: [i16; 3],
-    borders: [i16; 3],
-    minor_text: [i16; 3],
-    major_text: [i16; 3],
-    selectsymbol: String,
+    pub gauge: [u8; 3],
+    pub borders: [u8; 3],
+    pub minor_text: [u8; 3],
+    pub major_text: [u8; 3],
+    pub selectsymbol: String,
 }
 
 impl Theme {
@@ -26,10 +26,10 @@ impl Theme {
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Settings {
-    discord: bool,
-    server: bool,
-    caching: bool,
-    volume: i8,
+    pub discord: bool,
+    pub server: bool,
+    pub caching: bool,
+    pub volume: u8,
 }
 
 
@@ -45,8 +45,26 @@ impl Default for Settings {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Server {
+    pub hostname: String,
+    pub port: u16,
+    pub ip4: [u8; 4],
+}
+
+impl Server {
+    pub fn new(hostname: String, port: u16, ip4: [u8; 4]) -> Self {
+        Self {
+            hostname,
+            port,
+            ip4,
+        }
+    }
+}
+
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Servers {
-    servers: Vec<Server>,
+    pub servers: Vec<Server>,
 }
 
 impl Servers {
@@ -58,28 +76,11 @@ impl Servers {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct Server {
-    hostname: String,
-    port: u16,
-    ip4: [i8; 4],
-}
-
-impl Server {
-    pub fn new(hostname: String, port: u16, ip4: [i8; 4]) -> Self {
-        Self {
-            hostname,
-            port,
-            ip4,
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct MuConfig {
-    rmu: i32,
-    theme: Theme,
-    settings: Settings,
-    servers: Servers,
+    pub rmu: i32,
+    pub theme: Theme,
+    pub settings: Settings,
+    pub servers: Servers,
 }
 
 impl MuConfig {

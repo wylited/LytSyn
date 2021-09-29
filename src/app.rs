@@ -76,6 +76,7 @@ impl App {
         let stdout = io::stdout();
         let backend = CrosstermBackend::new(stdout);
         let mut terminal = Terminal::new(backend)?;
+        let config = MuConfig::get();
         terminal.clear()?;
 
         loop {
@@ -99,8 +100,6 @@ impl App {
 
                 rect.render_widget(initbox, size); */
 
-                let _config = MuConfig::get();
-
                 let horizontal_chunks = Layout::default()
                     .direction(Direction::Horizontal)
                     .margin(1)
@@ -117,13 +116,17 @@ impl App {
 
                 //renderer
                 // Play tree
-                let playtree = RustMUTree::display(mutree);
+                let playtree = RustMUTree::display(mutree)
+                    .style(Style::default().fg(Color::Rgb(config.theme.minor_text[0], config.theme.minor_text[1], config.theme.minor_text[2])))
+                    .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
+                    .highlight_symbol(&config.theme.selectsymbol);
+
                 rect.render_widget(playtree, horizontal_chunks[0]);
 
-                let queue = Block::default().title("| Queue |").borders(Borders::ALL);
+                let queue = Block::default().title("│ Queue │").borders(Borders::ALL);
                 rect.render_widget(queue, vertical_chunks[0]);
 
-                let player = Block::default().title("| Player |").borders(Borders::ALL);
+                let player = Block::default().title("│ Player │").borders(Borders::ALL);
                 rect.render_widget(player, vertical_chunks[1]);
             })?;
 

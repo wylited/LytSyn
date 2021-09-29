@@ -60,14 +60,11 @@ impl RustMUTree {
         let mut items: Vec<ListItem<'a>> = Vec::new();
 
         for file in files {
-            items.push(ListItem::new(String::from("|")+ &file.name.into_string().unwrap()));
+            items.push(ListItem::new(String::from("│")+ &file.name.into_string().unwrap()));
         }
 
         List::new(items)
-            .block(Block::default().title("| Playlist |").borders(Borders::ALL))
-            .style(Style::default().fg(Color::White))
-            .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
-            .highlight_symbol(">>")
+            .block(Block::default().title("│ Playlist │").borders(Borders::ALL))
     }
 
     pub fn parse(other: bool) -> RustMUTree {
@@ -78,7 +75,7 @@ impl RustMUTree {
 
         for entry in glob(&format!("C:/Users/{}/Music/**/*", file)).expect("Failed to read glob pattern") {
             match entry {
-                Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap_or_default().to_os_string(), FileType::F, path.file_name().unwrap().to_os_string(), path.to_path_buf(), None)),
+                Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap_or_default().to_os_string(), FileType::F, path.file_stem().unwrap().to_os_string(), path.to_path_buf(), None)),
                 Err(e) => println!("{:?}", e),
             }
         }
