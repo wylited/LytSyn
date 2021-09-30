@@ -1,5 +1,4 @@
-use std::path::PathBuf;
-use std::fs;
+use std::{fs::File, path::PathBuf, fs::OpenOptions, fs};
 use serde::{Deserialize, Serialize};
 use directories::ProjectDirs;
 
@@ -95,12 +94,22 @@ impl MuConfig {
 
     pub fn get() -> MuConfig {
         let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "RustMU").unwrap().config_dir().to_path_buf();
-        let config_string = fs::read_to_string(&config_file.join("config.toml"));
+        let f = config_file.join("config.toml");
+        let res = fs::create_dir_all(config_file);
+        let foo = OpenOptions::new().read(true).open(&f); 
+        let config_string = fs::read_to_string(&f);
+
+        let newconfig = || -> MuConfig{
+            let toml_string = toml::to_string(&MuConfig::default()).expect("Could not encode TOML value");
+            fs::write(f, toml_string).expect("Could not write to file!");
+            MuConfig::default()
+        };
         
         let config: MuConfig = match config_string {
             Ok(file) => toml::from_str(&file).unwrap(),
-            Err(_) => MuConfig::default(),
+            Err(_) => newconfig(),
         };
+
         config
     }
 }
