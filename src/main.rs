@@ -3,6 +3,7 @@
 mod app;
 mod config;
 mod playtree;
+mod drpc;
 
 extern crate tokio;
 

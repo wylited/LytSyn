@@ -83,23 +83,6 @@ impl App {
             terminal.draw(|rect| {
                 let size = rect.size();
 
-                /* let initbox = Paragraph::new(vec![
-                    Spans::from(vec![Span::raw(r"♫  ___         _   __  __ _   _  ♫")]),
-                    Spans::from(vec![Span::raw(r"♫ | _ \_  _ __| |_|  \/  | | | | ♫")]),
-                    Spans::from(vec![Span::raw(r"♫ |   / || (_-<  _| |\/| | |_| | ♫")]),
-                    Spans::from(vec![Span::raw(r"♫ |_|_\\_,_/__/\__|_|  |_|\___/  ♫")]),
-                ])
-                .alignment(Alignment::Center)
-                .block(
-                    Block::default()
-                        .borders(Borders::ALL)
-                        .style(Style::default().fg(Color::LightYellow))
-                        .title("RustMU")
-                        .border_type(BorderType::Plain),
-                );
-
-                rect.render_widget(initbox, size); */
-
                 let horizontal_chunks = Layout::default()
                     .direction(Direction::Horizontal)
                     .margin(1)
@@ -110,9 +93,9 @@ impl App {
                     .direction(Direction::Vertical)
                     .margin(0)
                     .constraints([
-                        Constraint::Percentage(10),
+                        Constraint::Percentage(20),
                         Constraint::Percentage(60),
-                        Constraint::Percentage(30),
+                        Constraint::Percentage(20),
                     ])
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
@@ -137,10 +120,10 @@ impl App {
                 rect.render_widget(playtree, horizontal_chunks[0]);
 
                 let rmubox = Paragraph::new(vec![
-                    Spans::from(vec![Span::raw(r"♫  ___         _   __  __ _   _  ♫")]),
-                    Spans::from(vec![Span::raw(r"♫ | _ \_  _ __| |_|  \/  | | | | ♫")]),
-                    Spans::from(vec![Span::raw(r"♫ |   / || (_-<  _| |\/| | |_| | ♫")]),
-                    Spans::from(vec![Span::raw(r"♫ |_|_\\_,_/__/\__|_|  |_|\___/  ♫")]),
+                    Spans::from(vec![Span::raw(r"   ♫ ___           __  __  _____  __  ♫")]),
+                    Spans::from(vec![Span::raw(r"  ♫ / _ \__ _____ / /_/  |/  / / / / ♫")]),
+                    Spans::from(vec![Span::raw(r" ♫ / , _/ // (_-</ __/ /|_/ / /_/ / ♫")]),
+                    Spans::from(vec![Span::raw(r"♫ /_/|_|\_,_/___/\__/_/  /_/\____/ ♫")]),
                 ])
                 .alignment(Alignment::Center)
                 .block(

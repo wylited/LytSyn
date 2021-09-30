@@ -13,7 +13,6 @@ use directories::UserDirs;
 #[derive(Clone, Debug)]
 pub enum FileType {
     F,
-    D,
 }
 
 #[derive(Clone, Debug)]

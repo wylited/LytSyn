@@ -95,8 +95,8 @@ impl MuConfig {
     pub fn get() -> MuConfig {
         let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "RustMU").unwrap().config_dir().to_path_buf();
         let f = config_file.join("config.toml");
-        let res = fs::create_dir_all(config_file);
-        let foo = OpenOptions::new().read(true).open(&f); 
+        let _res = fs::create_dir_all(config_file);
+        let _foo = OpenOptions::new().read(true).open(&f); 
         let config_string = fs::read_to_string(&f);
 
         let newconfig = || -> MuConfig{
