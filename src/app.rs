@@ -108,26 +108,71 @@ impl App {
 
                 let vertical_chunks = Layout::default()
                     .direction(Direction::Vertical)
-                    .margin(1)
-                    .constraints([Constraint::Percentage(70), Constraint::Percentage(30)])
+                    .margin(0)
+                    .constraints([
+                        Constraint::Percentage(10),
+                        Constraint::Percentage(60),
+                        Constraint::Percentage(30),
+                    ])
                     .split(horizontal_chunks[1]); //Main Horizontal Chunks
 
-                let mutree = RustMUTree::parse(false);
+                let mutree = RustMUTree::parse(false, None);
 
                 //renderer
                 // Play tree
                 let playtree = RustMUTree::display(mutree)
-                    .style(Style::default().fg(Color::Rgb(config.theme.minor_text[0], config.theme.minor_text[1], config.theme.minor_text[2])))
+                    .block(
+                        Block::default()
+                            .title("│ Playlist │")
+                            .borders(Borders::ALL)
+                            .style(Style::default().fg(Color::Rgb(config.theme.borders[0] ,config.theme.borders[1], config.theme.borders[2]))))
+                    .style(Style::default().fg(Color::Rgb(
+                        config.theme.minor_text[0],
+                        config.theme.minor_text[1],
+                        config.theme.minor_text[2],
+                    )))
                     .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
                     .highlight_symbol(&config.theme.selectsymbol);
 
                 rect.render_widget(playtree, horizontal_chunks[0]);
 
-                let queue = Block::default().title("│ Queue │").borders(Borders::ALL);
-                rect.render_widget(queue, vertical_chunks[0]);
+                let rmubox = Paragraph::new(vec![
+                    Spans::from(vec![Span::raw(r"♫  ___         _   __  __ _   _  ♫")]),
+                    Spans::from(vec![Span::raw(r"♫ | _ \_  _ __| |_|  \/  | | | | ♫")]),
+                    Spans::from(vec![Span::raw(r"♫ |   / || (_-<  _| |\/| | |_| | ♫")]),
+                    Spans::from(vec![Span::raw(r"♫ |_|_\\_,_/__/\__|_|  |_|\___/  ♫")]),
+                ])
+                .alignment(Alignment::Center)
+                .block(
+                    Block::default()
+                        .borders(Borders::ALL)
+                        .style(Style::default().fg(Color::Rgb(config.theme.borders[0], config.theme.borders[1], config.theme.borders[2])))
+                        .title("RustMU")
+                        .border_type(BorderType::Thick),
+                );
 
-                let player = Block::default().title("│ Player │").borders(Borders::ALL);
-                rect.render_widget(player, vertical_chunks[1]);
+                rect.render_widget(rmubox, vertical_chunks[0]);
+
+                let queue = Block::default()
+                    .title("│ Queue │")
+                    .borders(Borders::ALL)
+                    .style(Style::default().fg(Color::Rgb(
+                        config.theme.minor_text[0],
+                        config.theme.minor_text[1],
+                        config.theme.minor_text[2],
+                    )));
+
+                rect.render_widget(queue, vertical_chunks[1]);
+
+                let player = Block::default()
+                    .title("│ Player │")
+                    .borders(Borders::ALL)
+                    .style(Style::default().fg(Color::Rgb(
+                        config.theme.minor_text[0],
+                        config.theme.minor_text[1],
+                        config.theme.minor_text[2],
+                    )));
+                rect.render_widget(player, vertical_chunks[2]);
             })?;
 
             match rx.recv()? {

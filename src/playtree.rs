@@ -64,16 +64,19 @@ impl RustMUTree {
         }
 
         List::new(items)
-            .block(Block::default().title("│ Playlist │").borders(Borders::ALL))
     }
 
-    pub fn parse(other: bool) -> RustMUTree {
+    pub fn parse(other: bool, ofile: Option<&str>) -> RustMUTree {
         let mut tree = Vec::new();
-
         let user_dir = UserDirs::new().unwrap();
         let file: &str = &user_dir.home_dir().file_name().unwrap().to_str().unwrap();
+        let mut iter = glob(&format!("C:/Users/{}/Music/**/*", file)).expect("Failed to read glob pattern");
+        
+        if other  == true {
+            iter = glob(ofile.unwrap()).expect("Failed")
+        }
 
-        for entry in glob(&format!("C:/Users/{}/Music/**/*", file)).expect("Failed to read glob pattern") {
+        for entry in iter {
             match entry {
                 Ok(path) => tree.push(RustMUFile::new(path.extension().unwrap_or_default().to_os_string(), FileType::F, path.file_stem().unwrap().to_os_string(), path.to_path_buf(), None)),
                 Err(e) => println!("{:?}", e),

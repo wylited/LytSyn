@@ -1,0 +1,18 @@
+language: rust
+cache: cargo
+os: windows 
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+matrix:
+  allow_failures:
+    - rust: nightly
+  before_cache: 
+    - rm -rf ~/.cargo/registry/index/ # Remove cache files 
+    - rm -f  ./target/.rustc_info.json # Remove more cache files that are rec
+
+script:
+  - "cargo build --verbose --release"
