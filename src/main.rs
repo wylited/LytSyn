@@ -41,9 +41,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     let mut _args: Vec<String> = std::env::args().collect();
 
-    let mut rust_mu: App = App::new(
-        OutputStream::try_default().unwrap().1,
-        OutputStream::try_default().unwrap().0,
-    );
+    let mut rust_mu: App = App::new();
     rust_mu.run()
 }

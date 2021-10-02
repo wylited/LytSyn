@@ -14,10 +14,10 @@ pub struct Theme {
 impl Theme {
     pub fn default() -> Theme {
         Theme {
-            gauge: [85, 170, 200],
-            borders: [30, 30, 60],
-            minor_text: [255, 255, 255],
-            major_text: [255, 200, 70],
+            gauge: [22, 22, 22],
+            borders: [22, 22, 22],
+            minor_text: [22, 22, 22],
+            major_text: [22, 22, 22],
             selectsymbol: ">>".to_string(),
         }
     }
