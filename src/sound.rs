@@ -1,12 +1,12 @@
 use rodio::OutputStream;
 
-pub struct SEngine {
+pub struct SynEngine {
     pub stream: OutputStream,
     pub stream_handle: OutputStreamHandle,
     pub sink: Sink,
 }
 
-impl SEngine {
+impl SynEngine {
     pub fn create() -> self{
         self {
             stream: OutputStream::try_default().unwrap().0,

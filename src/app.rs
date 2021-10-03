@@ -1,4 +1,4 @@
-use crate::{config::LytConfig, drpc::Drpc, playtree::RustMUTree};
+use crate::{config::LytConfig, drpc::Drpc, renderer::REngine};
 use std::{
     env,
     io::{self, Stdout},
@@ -10,16 +10,6 @@ use std::{
 
 use crossterm::{
     event::{self, Event as CEvent, KeyCode},
-    terminal::{disable_raw_mode, enable_raw_mode},
-};
-use tui::{
-    backend::CrosstermBackend,
-    layout::{Constraint, Direction, Layout},
-    style::{Color, Modifier, Style},
-    widgets::{
-        Block, Borders
-    },
-    Terminal,
 };
 
 enum Event<I> {
@@ -48,9 +38,12 @@ impl App {
     }
 
     pub fn run(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        let backend = CrosstermBackend::new(self.stdout.lock()); // Crossterm backend for the terminal
-        let mut terminal = Terminal::new(backend)?; // Terminal Backend.
-        enable_raw_mode().expect("can run in raw mode"); //Sets the terminal to run in raw mode.
+        let mut renderer = REngine::new(); //Fully refactored Rendering engine.
+
+        tokio::spawn(async move{
+            REngine::start(&mut renderer);
+        });
+
         let (tx, rx) = mpsc::channel();
 
         if self.config.settings.discord {
@@ -80,87 +73,19 @@ impl App {
             }
         }); //Ticking and polling.
 
-        terminal.clear()?;
-
         loop {
-            terminal.draw(|rect| {
-                let size = rect.size();
-
-                let horizontal_chunks = Layout::default()
-                    .direction(Direction::Horizontal)
-                    .margin(1)
-                    .constraints([Constraint::Percentage(30), Constraint::Percentage(70)].as_ref())
-                    .split(size); //Main Vertical Chunks
-
-                let vertical_chunks = Layout::default()
-                    .direction(Direction::Vertical)
-                    .margin(0)
-                    .constraints([Constraint::Percentage(80), Constraint::Percentage(20)])
-                    .split(horizontal_chunks[1]); //Main Horizontal Chunks
-
-                let mutree = RustMUTree::parse(false, None);
-
-                //renderer
-                // Play tree
-                let playtree = RustMUTree::display(mutree)
-                    .block(
-                        Block::default()
-                            .title("│ Playlist │")
-                            .borders(Borders::ALL)
-                            .style(Style::default().fg(Color::Rgb(
-                                self.config.theme.borders[0],
-                                self.config.theme.borders[1],
-                                self.config.theme.borders[2],
-                            ))),
-                    )
-                    .style(Style::default().fg(Color::Rgb(
-                        self.config.theme.minor_text[0],
-                        self.config.theme.minor_text[1],
-                        self.config.theme.minor_text[2],
-                    )))
-                    .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
-                    .highlight_symbol(&self.config.theme.selectsymbol);
-
-                rect.render_widget(playtree, horizontal_chunks[0]);
-
-                let queue = Block::default()
-                    .title("│ Queue │")
-                    .borders(Borders::ALL)
-                    .style(Style::default().fg(Color::Rgb(
-                        self.config.theme.minor_text[0],
-                        self.config.theme.minor_text[1],
-                        self.config.theme.minor_text[2],
-                    )));
-
-                rect.render_widget(queue, vertical_chunks[0]);
-
-                let player = Block::default()
-                    .title("│ Player │")
-                    .borders(Borders::ALL)
-                    .style(Style::default().fg(Color::Rgb(
-                        self.config.theme.minor_text[0],
-                        self.config.theme.minor_text[1],
-                        self.config.theme.minor_text[2],
-                    )));
-                rect.render_widget(player, vertical_chunks[1]);
-            })?;
-
+            //Hotkeys, This is prob gonna be refactored before I do networking but after I finish the SynEngine.
             match rx.recv()? {
                 Event::Input(event) => match event.code {
                     KeyCode::Char('q') => {
                         self.quit = true;
+                        break;
                     }
                     KeyCode::Char('-') => {}
                     KeyCode::Char('u') => {}
                     _ => {}
                 },
                 Event::Tick => {}
-            }
-
-            if self.quit {
-                disable_raw_mode()?;
-                terminal.show_cursor()?;
-                break;
             }
         }
         Ok(())

@@ -13,7 +13,7 @@ serde = {version = "1.0.130", features = ["derive"] }
 serde_derive = "^1.0"
 serde_yaml = "0.8.21"
 tui = { version = "0.16.0", default-features = false, features = ['crossterm', 'serde'] }
-tokio = { version = "1.11.0", features = ["full"] }
+tokio = { version = "1.12.0", features = ["full"] }
 toml = "0.5.8"
 rodio = "0.14.0"
 discord_game_sdk = "1.0.1"
@@ -29,4 +29,4 @@ winres = "0.1"
 [[bin]]
 bench = false
 path = "src/main.rs"
-name = "lytsyn"
+name = "LytSyn"

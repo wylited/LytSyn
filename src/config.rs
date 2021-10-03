@@ -2,7 +2,7 @@ use std::{ path::PathBuf, fs::OpenOptions, fs};
 use serde::{Deserialize, Serialize};
 use directories::ProjectDirs;
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Theme {
     pub gauge: [u8; 3],
     pub borders: [u8; 3],
@@ -23,7 +23,7 @@ impl Theme {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Settings {
     pub discord: bool,
     pub server: bool,
@@ -45,7 +45,7 @@ impl Default for Settings {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Server {
     pub hostname: String,
     pub port: u16,
@@ -63,7 +63,7 @@ impl Server {
 }
 
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct Servers {
     pub servers: Vec<Server>,
 }
@@ -76,7 +76,7 @@ impl Servers {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct LytConfig {
     pub rmu: i32,
     pub theme: Theme,
