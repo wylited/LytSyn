@@ -7,7 +7,7 @@ pub struct SEngine {
 }
 
 impl SEngine {
-    pub fn start() -> self{
+    pub fn create() -> self{
         self {
             stream: OutputStream::try_default().unwrap().0,
             stream_handle: OutputStream::try_default().unwrap().1,

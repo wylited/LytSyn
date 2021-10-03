@@ -1,4 +1,4 @@
-use std::{fs::File, path::PathBuf, fs::OpenOptions, fs};
+use std::{ path::PathBuf, fs::OpenOptions, fs};
 use serde::{Deserialize, Serialize};
 use directories::ProjectDirs;
 
@@ -14,10 +14,10 @@ pub struct Theme {
 impl Theme {
     pub fn default() -> Theme {
         Theme {
-            gauge: [22, 22, 22],
-            borders: [22, 22, 22],
-            minor_text: [22, 22, 22],
-            major_text: [22, 22, 22],
+            gauge: [85, 170, 200],
+            borders: [66, 138, 138],
+            minor_text: [140, 200, 200],
+            major_text: [100, 180, 180],
             selectsymbol: ">>".to_string(),
         }
     }
@@ -29,6 +29,7 @@ pub struct Settings {
     pub server: bool,
     pub caching: bool,
     pub volume: u8,
+    pub dark: bool,
 }
 
 
@@ -39,6 +40,7 @@ impl Default for Settings {
             server: true,
             caching: false,
             volume: 95,
+            dark: true,
         }
     }
 }
@@ -75,14 +77,14 @@ impl Servers {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct MuConfig {
+pub struct LytConfig {
     pub rmu: i32,
     pub theme: Theme,
     pub settings: Settings,
     pub servers: Servers,
 }
 
-impl MuConfig {
+impl LytConfig {
     pub fn default() -> Self {
         Self {  
             rmu: 12345678,
@@ -92,20 +94,20 @@ impl MuConfig {
         }
     }
 
-    pub fn get() -> MuConfig {
-        let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "RustMU").unwrap().config_dir().to_path_buf();
+    pub fn get() -> LytConfig {
+        let config_file: PathBuf = ProjectDirs::from("io", "Wylited",  "LytSyn").unwrap().config_dir().to_path_buf();
         let f = config_file.join("config.toml");
         let _res = fs::create_dir_all(config_file);
         let _foo = OpenOptions::new().read(true).open(&f); 
         let config_string = fs::read_to_string(&f);
 
-        let newconfig = || -> MuConfig{
-            let toml_string = toml::to_string(&MuConfig::default()).expect("Could not encode TOML value");
+        let newconfig = || -> LytConfig{
+            let toml_string = toml::to_string(&LytConfig::default()).expect("Could not encode TOML value");
             fs::write(f, toml_string).expect("Could not write to file!");
-            MuConfig::default()
+            LytConfig::default()
         };
         
-        let config: MuConfig = match config_string {
+        let config: LytConfig = match config_string {
             Ok(file) => toml::from_str(&file).unwrap(),
             Err(_) => newconfig(),
         };

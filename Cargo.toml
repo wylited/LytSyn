@@ -1,5 +1,5 @@
 [package]
-name = "rustmu"
+name = "lytsyn"
 version = "0.1.0"
 edition = "2018"
 
@@ -26,10 +26,7 @@ chrono = "0.4.19"
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1"
 
-[replace]
-"discord-rpc-client:0.3.0" = { git = "https://github.com/JakeStanger/discord-rpc-client.rs" }
-
 [[bin]]
 bench = false
 path = "src/main.rs"
-name = "rustmu"
+name = "lytsyn"

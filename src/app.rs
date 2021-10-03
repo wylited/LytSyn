@@ -1,26 +1,23 @@
-use crate::{config::MuConfig, drpc::Drpc, playtree::RustMUTree};
+use crate::{config::LytConfig, drpc::Drpc, playtree::RustMUTree};
 use std::{
     env,
     io::{self, Stdout},
     path::PathBuf,
-    sync::mpsc::{self, Receiver, Sender},
+    sync::mpsc,
     thread,
     time::{Duration, Instant},
 };
 
 use crossterm::{
-    event::{self, Event as CEvent, KeyCode, KeyEvent},
+    event::{self, Event as CEvent, KeyCode},
     terminal::{disable_raw_mode, enable_raw_mode},
 };
-use directories::UserDirs;
-use rodio::{source::Source, Decoder, OutputStream, OutputStreamHandle, Sink};
 use tui::{
     backend::CrosstermBackend,
-    layout::{Alignment, Constraint, Direction, Layout, Rect},
+    layout::{Constraint, Direction, Layout},
     style::{Color, Modifier, Style},
-    text::{Span, Spans},
     widgets::{
-        Block, BorderType, Borders, Cell, List, ListItem, ListState, Paragraph, Row, Table, Tabs,
+        Block, Borders
     },
     Terminal,
 };
@@ -33,7 +30,7 @@ enum Event<I> {
 pub struct App {
     pub work_dir: PathBuf, //Where the working directory is.
     pub quit: bool,        //Becomes true when the user presses <ESC>, causing the program to exit.
-    pub config: MuConfig,  //The config that is used.
+    pub config: LytConfig,  //The config that is used.
     pub stdout: Stdout,    //The standard output stream.
 }
 
@@ -45,7 +42,7 @@ impl App {
                 Err(_e) => PathBuf::new(),
             },
             quit: false,
-            config: MuConfig::get(),
+            config: LytConfig::get(),
             stdout: io::stdout(),
         }
     }

@@ -1,13 +1,7 @@
 use glob::glob;
-use rodio::{source::Source, Decoder, OutputStream, Sink};
-use std::collections::HashSet;
 use std::ffi::OsString;
-use std::fs;
-use std::fs::File;
-use std::io::BufReader;
-use std::path::{Path, PathBuf};
-use tui::style::{Color, Modifier, Style};
-use tui::widgets::{Block, Borders, List, ListItem};
+use std::path::{ PathBuf};
+use tui::widgets::{List, ListItem};
 use directories::UserDirs;
 
 #[derive(Clone, Debug)]
